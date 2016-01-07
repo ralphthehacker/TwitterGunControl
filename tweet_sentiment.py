@@ -52,7 +52,6 @@ def calculate_tweet_score(scores,tweets):
 def main():
     sent_file = open(sys.argv[1])
     tweet_file = open(sys.argv[2])
-    hw()
 
     #Creating a list with the sentiment scores
     scores = create_score_dict(sent_file)

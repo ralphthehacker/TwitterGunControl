@@ -56,7 +56,8 @@ def count_ratingless_scores(sent_scores, tweets,tweets_scores):
             for word in tweet['text'].split() :
                 #Create a list to keep track of ratingless words that appeared in this tweet so that their scores are not exagg.
                 seen_words = []
-                if word not in sent_scores.keys():
+                #Also excluding users from sentiment analysis
+                if word not in sent_scores.keys() and word[0]!= '@':
                     #Two scenarios: Either the word has already been seen
                     if word in ratingless_words.keys():
                         # If this is the first time the word appears in a tweet, increase its score
@@ -68,7 +69,7 @@ def count_ratingless_scores(sent_scores, tweets,tweets_scores):
                         # Then increase the count of ocurrences
                         ratingless_words[word] = (cur_score,cur_count+1)
                     #or the word is completely new
-                    else:
+                    elif word[0] != '@':
                         # If so, set it's base value to the tweet's sentiment score and default it to 1 ocurrence
                         ratingless_words[word] = (tweets_scores[index],1)
                         # And flag the word as seen
@@ -93,7 +94,6 @@ def lines(fp):
 def main():
     sent_file = open(sys.argv[1])
     tweet_file = open(sys.argv[2])
-    hw()
      #Creating a list with the sentiment scores
     scores = create_score_dict(sent_file)
     tweets = create_list_of_tweets(tweet_file)
@@ -106,8 +106,7 @@ def main():
     for key in ratingless_words_scores.keys():
         print key,ratingless_words_scores[key]
 
-    lines(sent_file)
-    lines(tweet_file)
+
     lines(sent_file)
     lines(tweet_file)
 
