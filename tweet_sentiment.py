@@ -1,6 +1,7 @@
 import sys
 import json
-
+#TODO: Log the tweets' text and the sentiment result to see if those are valid
+import logging
 def hw():
     print 'Hello, world!'
 

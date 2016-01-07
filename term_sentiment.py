@@ -39,7 +39,7 @@ def calculate_tweet_score(scores,tweets):
             #Add the score to the current list of scores
             tweet_score_list.append(current_score)
             tweet_count += 1 #And increment the index pointer
-
+    return tweet_score_list
 
 
 # This method finds the words that don't have a sentiment score and estimates them
@@ -60,17 +60,17 @@ def count_ratingless_scores(sent_scores, tweets,tweets_scores):
                     #Two scenarios: Either the word has already been seen
                     if word in ratingless_words.keys():
                         # If this is the first time the word appears in a tweet, increase its score
-                        cur_score = ratingless_words['word'][0]
-                        cur_count = ratingless_words['word'][1]
+                        cur_score = ratingless_words[word][0]
+                        cur_count = ratingless_words[word][1]
                         if word not in seen_words:
-                            ratingless_words['word'] = ( cur_score + tweets_scores[index],cur_count)
-                            seen_words.append('word') #and flag the word as seen
+                            ratingless_words[word] = ( cur_score + tweets_scores[index],cur_count)
+                            seen_words.append(word) #and flag the word as seen
                         # Then increase the count of ocurrences
-                        ratingless_words['word'] = (cur_score,cur_count+1)
+                        ratingless_words[word] = (cur_score,cur_count+1)
                     #or the word is completely new
                     else:
                         # If so, set it's base value to the tweet's sentiment score and default it to 1 ocurrence
-                        ratingless_words['word'] = (tweets_scores[index],1)
+                        ratingless_words[word] = (tweets_scores[index],1)
                         # And flag the word as seen
                         seen_words.append(word)
 
