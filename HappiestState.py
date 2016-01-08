@@ -108,16 +108,45 @@ def calculate_tweet_score(scores,tweets):
     return tweet_score_list
 
 def determine_happiest_state(tweets,tweet_score_list,us_states):
+    # Creating dictionaries to keep track of total happiness and the states
     state_count = {}
+    happy_map = {}
     #For every tweet, print out its 'places' component
     for state_name in us_states.values():
         state_count[state_name] = 0
 
-    for tweet in tweets:
+    for i,tweet in enumerate(tweets):
         if tweet.keys()[0] != 'delete':
+            # Creating a map counting the tweets mentioning the US states
             for state_name in us_states.values():
-                if state_name in tweet['place']['full_name']:
-                    state_count[state_name]  =  state_count[state_name] + 1
+                current_state = state_name
+                # Checking if the tweet has a place, if it's in the US and then determining the state
+                if tweet['place'] != None and tweet['place']['country'] == 'United States' and state_name in tweet['place']['full_name']:
+                    #Handling the edge case of the Washington state
+                    happy_state = state_name
+                    if current_state == ['Washington']:
+                        if "DC" in tweet['place']['full_name'] or "D.C." in tweet['place']['full name']:
+                            state_count['District of Columbia'] += 1
+                            happy_state = 'District of Columbia'
+                        else:
+                            state_count['Washington'] += 1
+                            happy_state = 'Washington'
+                    else:
+                        place = tweet['place']
+                        state_count[state_name]  =  state_count[state_name] + 1
+                    # Then, add up the happiness value
+                    if happy_state in happy_map.keys():
+                        #Add the corresponding tweet's happiness score
+                        happy_map[happy_state] += tweet_score_list[i]
+                    else:
+                        happy_map[happy_state] =  tweet_score_list[i]
+                    # We have found the state, so just move on to the next tweet
+                    break
+
+    #Now, simply calculate the happiest state in average
+    for key in happy_map.keys():
+        happy_map[key] = float(happy_map[key])/state_count[key]
+    return ("{0} {1}".format(key,happy_map[key]))
 
 def main():
     sent_file = open(sys.argv[1])
@@ -132,7 +161,7 @@ def main():
     tweet_score_list = calculate_tweet_score(scores,tweets)
 
     #Now, let's determine which state is the happiest
-    determine_happiest_state(tweets,tweet_score_list,us_states)
+    print(determine_happiest_state(tweets,tweet_score_list,us_states))
 
     lines(sent_file)
     lines(tweet_file)
