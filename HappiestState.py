@@ -61,6 +61,7 @@ def create_dict_us_states():
             'WV': 'West Virginia',
             'WY': 'Wyoming'
     }
+
 def hw():
     print 'Hello, world!'
 
@@ -143,10 +144,13 @@ def determine_happiest_state(tweets,tweet_score_list,us_states):
                     # We have found the state, so just move on to the next tweet
                     break
 
+    #Create a inverse mapping to make sure that the output is printed in the right format
+    inv_map = {v: k for k, v in us_states.items()}
     #Now, simply calculate the happiest state in average
     for key in happy_map.keys():
         happy_map[key] = float(happy_map[key])/state_count[key]
-    return ("{0} {1}".format(key,happy_map[key]))
+    #determining the best state
+    return(inv_map[max(happy_map)])
 
 def main():
     sent_file = open(sys.argv[1])
@@ -163,8 +167,7 @@ def main():
     #Now, let's determine which state is the happiest
     print(determine_happiest_state(tweets,tweet_score_list,us_states))
 
-    lines(sent_file)
-    lines(tweet_file)
+
 
 if __name__ == '__main__':
     main()

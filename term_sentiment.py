@@ -107,8 +107,7 @@ def main():
         print key,ratingless_words_scores[key]
 
 
-    lines(sent_file)
-    lines(tweet_file)
+
 
 if __name__ == '__main__':
     main()

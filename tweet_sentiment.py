@@ -31,8 +31,7 @@ def calculate_tweet_score(scores,tweets):
     for tweet in tweets:
         #If we're dealing with a deletion, the text can be ignored
         if tweet.keys()[0] == 'delete':
-            tweet_score_list.append(0)
-            tweet_count+=1
+            continue
         else:
             current_score = 0
             unknown_temp = []
@@ -49,6 +48,7 @@ def calculate_tweet_score(scores,tweets):
     return tweet_score_list
 
 
+
 def main():
     sent_file = open(sys.argv[1])
     tweet_file = open(sys.argv[2])
@@ -59,10 +59,12 @@ def main():
 
     #Now, proceed to analyze the sentiment score of each tweet
     tweet_score_list = calculate_tweet_score(scores,tweets)
+    for score in tweet_score_list:
+        if score != None:
+            print(score)
+        else:
+            print 0
 
-    print tweet_score_list
-    lines(sent_file)
-    lines(tweet_file)
 
 if __name__ == '__main__':
     main()

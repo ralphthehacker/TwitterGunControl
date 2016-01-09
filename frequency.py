@@ -15,7 +15,7 @@ def calculate_term_frequency(tweets):
     #Iterate through every word in the tweets and count them
     for tweet in tweets:
         if tweet.keys()[0] != 'delete':
-            for word in tweet['text']:
+            for word in tweet['text'].split():
                 # If the word isn't a user handle and it has been counted before, increment the count
                 if word in count_dict.keys() and word[0] != '@':
                     count_dict[word] = (word,count_dict[word][1]+1)
@@ -41,8 +41,9 @@ def main():
     #Calculate the frequency of every term in the file
     frequency = calculate_term_frequency(tweets)
     for key in frequency.keys():
-        print key, frequency[key][1]
-    lines(tweet_file)
+        if type(key.encode('utf-8'))!=type("I am a mighty string"):
+           continue
+        print key.encode('utf-8'), frequency[key][1]
 
 if __name__ == '__main__':
     main()
